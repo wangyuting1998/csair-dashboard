@@ -4,10 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>南航北京飞行部人员实力结构看板</title>
-<!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-/* 系统字体栈，不依赖外部字体 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 :root {
     --primary: #1565c0; --primary-light: #42a5f5; --primary-dark: #0d47a1;
     --accent: #00bcd4; --bg-deep: #0a1929; --bg-mid: #132f4c;
@@ -16,7 +15,7 @@
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background: linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-mid) 50%, #1e4976 100%);
     background-attachment: fixed; color: var(--text); min-height: 100vh; line-height: 1.6;
 }
@@ -129,14 +128,12 @@ body::before {
 .delay-1 { animation-delay: 0.1s; }
 .delay-2 { animation-delay: 0.2s; }
 .delay-3 { animation-delay: 0.3s; }
-.delay-4 { animation-delay: 0.4s; }
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-deep); }
 ::-webkit-scrollbar-thumb { background: var(--primary-dark); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 .tag { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
 .tag-blue { background: rgba(66,165,245,0.15); color: #90caf9; border: 1px solid rgba(66,165,245,0.3); }
-/* 离线提示 */
 .offline-notice {
     display: none;
     background: rgba(229,57,53,0.15);
@@ -148,11 +145,43 @@ body::before {
     text-align: center;
     font-size: 0.9rem;
 }
+
+/* 人员详细分类样式 */
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+@media (max-width: 768px) { .detail-grid { grid-template-columns: 1fr; } }
+.detail-column { display: flex; flex-direction: column; gap: 8px; }
+.detail-header {
+    font-size: 1rem; font-weight: 700; color: #fff;
+    padding-bottom: 10px; margin-bottom: 5px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.detail-subheader {
+    font-size: 0.85rem; font-weight: 600; color: var(--primary-light);
+    margin-top: 8px; margin-bottom: 2px;
+    padding-left: 8px; border-left: 3px solid var(--primary-light);
+}
+.detail-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 6px 10px; border-radius: 8px;
+    transition: background 0.2s;
+}
+.detail-item:hover { background: rgba(255,255,255,0.03); }
+.detail-item.indent { padding-left: 24px; }
+.detail-bar-wrap { flex: 1; display: flex; align-items: center; gap: 10px; }
+.detail-label { font-size: 0.85rem; color: var(--text); width: 80px; flex-shrink: 0; }
+.detail-bar-bg {
+    flex: 1; height: 8px; background: rgba(255,255,255,0.06);
+    border-radius: 4px; overflow: hidden;
+}
+.detail-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+.detail-num {
+    font-size: 0.9rem; font-weight: 700; color: var(--primary-light);
+    width: 50px; text-align: right; flex-shrink: 0;
+}
 </style>
 </head>
 <body>
 <div class="container">
-    <!-- 离线提示 -->
     <div id="offline-notice" class="offline-notice">
         ⚠️ 网络连接异常，图表无法加载。请检查网络后刷新页面。
     </div>
@@ -176,41 +205,196 @@ body::before {
             <div class="kpi-delta positive">↑ 稳步增长</div>
         </div>
         <div class="kpi-card animate-in delay-1">
-            <div class="kpi-value">156</div>
-            <div class="kpi-label">机长</div>
-            <div class="kpi-delta positive">占比 37.3%</div>
+            <div class="kpi-value">79</div>
+            <div class="kpi-label">教员总数</div>
+            <div class="kpi-delta positive">A教41/B教30/C教8</div>
+        </div>
+        <div class="kpi-card animate-in delay-2">
+            <div class="kpi-value">157</div>
+            <div class="kpi-label">机长（含教员/检查员）</div>
+            <div class="kpi-delta positive">占比 37.6%</div>
         </div>
         <div class="kpi-card animate-in delay-2">
             <div class="kpi-value">195</div>
             <div class="kpi-label">副驾驶</div>
             <div class="kpi-delta positive">占比 46.7%</div>
         </div>
-        <div class="kpi-card animate-in delay-2">
+        <div class="kpi-card animate-in delay-3">
             <div class="kpi-value">66</div>
             <div class="kpi-label">学员</div>
             <div class="kpi-delta positive">储备力量</div>
-        </div>
-        <div class="kpi-card animate-in delay-3">
-            <div class="kpi-value">15</div>
-            <div class="kpi-label">教员</div>
-            <div class="kpi-delta positive">教学骨干</div>
         </div>
     </div>
     
     <div class="chart-grid">
         <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">📊</div>人员结构分布</div>
-            <div class="chart-container"><canvas id="a320_structure"></canvas></div>
+            <div class="card-title"><div class="icon">📊</div>人员结构分布（互斥分类）</div>
+            <div class="chart-container">
+                <canvas id="a320_structure"></canvas>
+            </div>
+            <div style="text-align: center; margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary);">
+                机长 157 人 + 副驾驶 195 人 + 学员 66 人 = 418 人
+            </div>
         </div>
         <div class="card animate-in delay-2">
             <div class="card-title"><div class="icon">👨‍🏫</div>教员结构</div>
-            <div class="chart-container"><canvas id="a320_instructor"></canvas></div>
+            <div class="chart-container">
+                <canvas id="a320_instructor"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 人员详细分类 - 按图片分类 -->
+    <div class="card animate-in">
+        <div class="card-title"><div class="icon">📋</div>人员详细分类（按图片层级）</div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 15px;">
+            ℹ️ 注：检查员/教员/机长分类存在重叠（如检查员可能同时是A教和普通机长），各分类人数之和大于总人数
+        </div>
+        <div class="detail-grid">
+            <!-- 左侧：机长相关分类 -->
+            <div class="detail-column">
+                <div class="detail-header">🎖️ 机长/教员/检查员分类</div>
+                
+                <div class="detail-item">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">检查员</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 9.6%; background: linear-gradient(90deg, #f44336, #ef5350);"></div></div>
+                    </div>
+                    <div class="detail-num">15人</div>
+                </div>
+                
+                <div class="detail-subheader">教员</div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">A教</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 26.1%; background: linear-gradient(90deg, #ff9800, #ffa726);"></div></div>
+                    </div>
+                    <div class="detail-num">41人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">B教</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 19.1%; background: linear-gradient(90deg, #ff9800, #ffa726);"></div></div>
+                    </div>
+                    <div class="detail-num">30人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">C教</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 5.1%; background: linear-gradient(90deg, #ff9800, #ffa726);"></div></div>
+                    </div>
+                    <div class="detail-num">8人</div>
+                </div>
+                
+                <div class="detail-subheader">机长</div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">普通机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 49.0%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">77人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">新机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 3.2%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">5人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">B类机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 0.0%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">0人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">C类机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 18.5%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">29人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">D类机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 22.3%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">35人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">Z类机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 4.5%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">7人</div>
+                </div>
+            </div>
+            
+            <!-- 右侧：副驾驶+学员分类 -->
+            <div class="detail-column">
+                <div class="detail-header">✈️ 副驾驶/学员分类</div>
+                
+                <div class="detail-subheader">副驾驶</div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">A1</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 12.3%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">24人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">A2</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 28.2%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">55人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">B</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 14.4%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">28人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">C</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 21.0%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">41人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">D</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 17.4%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">34人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">E</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 6.7%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">13人</div>
+                </div>
+                
+                <div class="detail-item" style="margin-top: 15px;">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">学员</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 15.8%; background: linear-gradient(90deg, #78909c, #b0bec5);"></div></div>
+                    </div>
+                    <div class="detail-num">66人</div>
+                </div>
+            </div>
         </div>
     </div>
     
     <div class="card animate-in">
         <div class="card-title"><div class="icon">📈</div>近12个月人员趋势</div>
-        <div class="chart-container tall"><canvas id="a320_trend"></canvas></div>
+        <div class="chart-container tall">
+            <canvas id="a320_trend"></canvas>
+        </div>
     </div>
     
     <div class="section-header animate-in">
@@ -225,72 +409,72 @@ body::before {
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">142人 (91.0%)</span>
+                    <span class="progress-value">142人 (90.4%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 91.0%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 90.4%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">日韩</span>
-                    <span class="progress-value">138人 (88.5%)</span>
+                    <span class="progress-value">138人 (87.9%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 88.5%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 87.9%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">45人 (28.8%)</span>
+                    <span class="progress-value">45人 (28.7%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 28.8%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 28.7%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">南亚</span>
-                    <span class="progress-value">52人 (33.3%)</span>
+                    <span class="progress-value">52人 (33.1%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 33.3%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 33.1%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">欧洲</span>
-                    <span class="progress-value">128人 (82.1%)</span>
+                    <span class="progress-value">128人 (81.5%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 82.1%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 81.5%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">北美</span>
-                    <span class="progress-value">95人 (60.9%)</span>
+                    <span class="progress-value">95人 (60.5%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 60.9%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 60.5%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">澳新</span>
-                    <span class="progress-value">62人 (39.7%)</span>
+                    <span class="progress-value">62人 (39.5%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 39.7%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 39.5%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">中东</span>
-                    <span class="progress-value">48人 (30.8%)</span>
+                    <span class="progress-value">48人 (30.6%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 30.8%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 30.6%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">非洲</span>
-                    <span class="progress-value">35人 (22.4%)</span>
+                    <span class="progress-value">35人 (22.3%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 22.4%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 22.3%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">南美</span>
-                    <span class="progress-value">28人 (17.9%)</span>
+                    <span class="progress-value">28人 (17.8%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 17.9%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 17.8%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
@@ -312,30 +496,30 @@ body::before {
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">128人 (82.1%)</span>
+                    <span class="progress-value">128人 (81.5%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 82.1%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 81.5%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">日韩</span>
-                    <span class="progress-value">115人 (73.7%)</span>
+                    <span class="progress-value">115人 (73.2%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 73.7%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 73.2%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">38人 (24.4%)</span>
+                    <span class="progress-value">38人 (24.2%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 24.4%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 24.2%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">南亚</span>
-                    <span class="progress-value">42人 (26.9%)</span>
+                    <span class="progress-value">42人 (26.8%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 26.9%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 26.8%"></div></div>
             </div>
         </div>
     </div>
@@ -775,41 +959,196 @@ body::before {
             <div class="kpi-delta positive">↑ 稳步增长</div>
         </div>
         <div class="kpi-card animate-in delay-1">
-            <div class="kpi-value">105</div>
-            <div class="kpi-label">机长</div>
-            <div class="kpi-delta positive">占比 49.1%</div>
+            <div class="kpi-value">71</div>
+            <div class="kpi-label">教员总数</div>
+            <div class="kpi-delta positive">A教36/B教26/C教9</div>
+        </div>
+        <div class="kpi-card animate-in delay-2">
+            <div class="kpi-value">103</div>
+            <div class="kpi-label">机长（含教员/检查员）</div>
+            <div class="kpi-delta positive">占比 48.1%</div>
         </div>
         <div class="kpi-card animate-in delay-2">
             <div class="kpi-value">109</div>
             <div class="kpi-label">副驾驶</div>
             <div class="kpi-delta positive">占比 50.9%</div>
         </div>
-        <div class="kpi-card animate-in delay-2">
-            <div class="kpi-value">0</div>
+        <div class="kpi-card animate-in delay-3">
+            <div class="kpi-value">2</div>
             <div class="kpi-label">学员</div>
             <div class="kpi-delta positive">储备力量</div>
-        </div>
-        <div class="kpi-card animate-in delay-3">
-            <div class="kpi-value">10</div>
-            <div class="kpi-label">教员</div>
-            <div class="kpi-delta positive">教学骨干</div>
         </div>
     </div>
     
     <div class="chart-grid">
         <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">📊</div>人员结构分布</div>
-            <div class="chart-container"><canvas id="a330_structure"></canvas></div>
+            <div class="card-title"><div class="icon">📊</div>人员结构分布（互斥分类）</div>
+            <div class="chart-container">
+                <canvas id="a330_structure"></canvas>
+            </div>
+            <div style="text-align: center; margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary);">
+                机长 103 人 + 副驾驶 109 人 + 学员 2 人 = 214 人
+            </div>
         </div>
         <div class="card animate-in delay-2">
             <div class="card-title"><div class="icon">👨‍🏫</div>教员结构</div>
-            <div class="chart-container"><canvas id="a330_instructor"></canvas></div>
+            <div class="chart-container">
+                <canvas id="a330_instructor"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 人员详细分类 - 按图片分类 -->
+    <div class="card animate-in">
+        <div class="card-title"><div class="icon">📋</div>人员详细分类（按图片层级）</div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 15px;">
+            ℹ️ 注：检查员/教员/机长分类存在重叠（如检查员可能同时是A教和普通机长），各分类人数之和大于总人数
+        </div>
+        <div class="detail-grid">
+            <!-- 左侧：机长相关分类 -->
+            <div class="detail-column">
+                <div class="detail-header">🎖️ 机长/教员/检查员分类</div>
+                
+                <div class="detail-item">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">检查员</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 9.7%; background: linear-gradient(90deg, #f44336, #ef5350);"></div></div>
+                    </div>
+                    <div class="detail-num">10人</div>
+                </div>
+                
+                <div class="detail-subheader">教员</div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">A教</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 35.0%; background: linear-gradient(90deg, #ff9800, #ffa726);"></div></div>
+                    </div>
+                    <div class="detail-num">36人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">B教</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 25.2%; background: linear-gradient(90deg, #ff9800, #ffa726);"></div></div>
+                    </div>
+                    <div class="detail-num">26人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">C教</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 8.7%; background: linear-gradient(90deg, #ff9800, #ffa726);"></div></div>
+                    </div>
+                    <div class="detail-num">9人</div>
+                </div>
+                
+                <div class="detail-subheader">机长</div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">普通机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 33.0%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">34人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">新机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 0.0%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">0人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">B类机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 1.0%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">1人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">C类机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 1.9%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">2人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">D类机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 22.3%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">23人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">Z类机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 7.8%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">8人</div>
+                </div>
+            </div>
+            
+            <!-- 右侧：副驾驶+学员分类 -->
+            <div class="detail-column">
+                <div class="detail-header">✈️ 副驾驶/学员分类</div>
+                
+                <div class="detail-subheader">副驾驶</div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">A1</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 12.8%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">14人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">A2</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 45.9%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">50人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">B</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 30.3%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">33人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">C</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 8.3%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">9人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">D</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 0.9%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">1人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">E</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 0.0%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">0人</div>
+                </div>
+                
+                <div class="detail-item" style="margin-top: 15px;">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">学员</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 0.9%; background: linear-gradient(90deg, #78909c, #b0bec5);"></div></div>
+                    </div>
+                    <div class="detail-num">2人</div>
+                </div>
+            </div>
         </div>
     </div>
     
     <div class="card animate-in">
         <div class="card-title"><div class="icon">📈</div>近12个月人员趋势</div>
-        <div class="chart-container tall"><canvas id="a330_trend"></canvas></div>
+        <div class="chart-container tall">
+            <canvas id="a330_trend"></canvas>
+        </div>
     </div>
     
     <div class="section-header animate-in">
@@ -824,86 +1163,86 @@ body::before {
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">95人 (90.5%)</span>
+                    <span class="progress-value">95人 (92.2%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 90.5%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 92.2%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">日韩</span>
-                    <span class="progress-value">88人 (83.8%)</span>
+                    <span class="progress-value">88人 (85.4%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 83.8%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 85.4%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">32人 (30.5%)</span>
+                    <span class="progress-value">32人 (31.1%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 30.5%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 31.1%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">南亚</span>
-                    <span class="progress-value">38人 (36.2%)</span>
+                    <span class="progress-value">38人 (36.9%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 36.2%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 36.9%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">欧洲</span>
-                    <span class="progress-value">82人 (78.1%)</span>
+                    <span class="progress-value">82人 (79.6%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 78.1%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 79.6%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">北美</span>
-                    <span class="progress-value">58人 (55.2%)</span>
+                    <span class="progress-value">58人 (56.3%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 55.2%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 56.3%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">澳新</span>
-                    <span class="progress-value">42人 (40.0%)</span>
+                    <span class="progress-value">42人 (40.8%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 40.0%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 40.8%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">中东</span>
-                    <span class="progress-value">35人 (33.3%)</span>
+                    <span class="progress-value">35人 (34.0%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 33.3%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 34.0%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">非洲</span>
-                    <span class="progress-value">25人 (23.8%)</span>
+                    <span class="progress-value">25人 (24.3%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 23.8%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 24.3%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">南美</span>
-                    <span class="progress-value">18人 (17.1%)</span>
+                    <span class="progress-value">18人 (17.5%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 17.1%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 17.5%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">极地</span>
-                    <span class="progress-value">10人 (9.5%)</span>
+                    <span class="progress-value">10人 (9.7%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 9.5%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 9.7%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">其他</span>
-                    <span class="progress-value">5人 (4.8%)</span>
+                    <span class="progress-value">5人 (4.9%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 4.8%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 4.9%"></div></div>
             </div>
         </div>
         <div class="card animate-in delay-2">
@@ -911,30 +1250,30 @@ body::before {
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">85人 (81.0%)</span>
+                    <span class="progress-value">85人 (82.5%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 81.0%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 82.5%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">日韩</span>
-                    <span class="progress-value">75人 (71.4%)</span>
+                    <span class="progress-value">75人 (72.8%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 71.4%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 72.8%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">28人 (26.7%)</span>
+                    <span class="progress-value">28人 (27.2%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 26.7%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 27.2%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">南亚</span>
-                    <span class="progress-value">32人 (30.5%)</span>
+                    <span class="progress-value">32人 (31.1%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 30.5%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 31.1%"></div></div>
             </div>
         </div>
     </div>
@@ -1374,8 +1713,13 @@ body::before {
             <div class="kpi-delta positive">↑ 稳步增长</div>
         </div>
         <div class="kpi-card animate-in delay-1">
+            <div class="kpi-value">13</div>
+            <div class="kpi-label">教员总数</div>
+            <div class="kpi-delta positive">A教12/B教1/C教0</div>
+        </div>
+        <div class="kpi-card animate-in delay-2">
             <div class="kpi-value">37</div>
-            <div class="kpi-label">机长</div>
+            <div class="kpi-label">机长（含教员/检查员）</div>
             <div class="kpi-delta positive">占比 39.4%</div>
         </div>
         <div class="kpi-card animate-in delay-2">
@@ -1383,32 +1727,182 @@ body::before {
             <div class="kpi-label">副驾驶</div>
             <div class="kpi-delta positive">占比 57.4%</div>
         </div>
-        <div class="kpi-card animate-in delay-2">
+        <div class="kpi-card animate-in delay-3">
             <div class="kpi-value">3</div>
             <div class="kpi-label">学员</div>
             <div class="kpi-delta positive">储备力量</div>
-        </div>
-        <div class="kpi-card animate-in delay-3">
-            <div class="kpi-value">0</div>
-            <div class="kpi-label">教员</div>
-            <div class="kpi-delta positive">教学骨干</div>
         </div>
     </div>
     
     <div class="chart-grid">
         <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">📊</div>人员结构分布</div>
-            <div class="chart-container"><canvas id="a350_structure"></canvas></div>
+            <div class="card-title"><div class="icon">📊</div>人员结构分布（互斥分类）</div>
+            <div class="chart-container">
+                <canvas id="a350_structure"></canvas>
+            </div>
+            <div style="text-align: center; margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary);">
+                机长 37 人 + 副驾驶 54 人 + 学员 3 人 = 94 人
+            </div>
         </div>
         <div class="card animate-in delay-2">
             <div class="card-title"><div class="icon">👨‍🏫</div>教员结构</div>
-            <div class="chart-container"><canvas id="a350_instructor"></canvas></div>
+            <div class="chart-container">
+                <canvas id="a350_instructor"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 人员详细分类 - 按图片分类 -->
+    <div class="card animate-in">
+        <div class="card-title"><div class="icon">📋</div>人员详细分类（按图片层级）</div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 15px;">
+            ℹ️ 注：检查员/教员/机长分类存在重叠（如检查员可能同时是A教和普通机长），各分类人数之和大于总人数
+        </div>
+        <div class="detail-grid">
+            <!-- 左侧：机长相关分类 -->
+            <div class="detail-column">
+                <div class="detail-header">🎖️ 机长/教员/检查员分类</div>
+                
+                <div class="detail-item">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">检查员</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 0.0%; background: linear-gradient(90deg, #f44336, #ef5350);"></div></div>
+                    </div>
+                    <div class="detail-num">0人</div>
+                </div>
+                
+                <div class="detail-subheader">教员</div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">A教</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 32.4%; background: linear-gradient(90deg, #ff9800, #ffa726);"></div></div>
+                    </div>
+                    <div class="detail-num">12人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">B教</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 2.7%; background: linear-gradient(90deg, #ff9800, #ffa726);"></div></div>
+                    </div>
+                    <div class="detail-num">1人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">C教</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 0.0%; background: linear-gradient(90deg, #ff9800, #ffa726);"></div></div>
+                    </div>
+                    <div class="detail-num">0人</div>
+                </div>
+                
+                <div class="detail-subheader">机长</div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">普通机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 64.9%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">24人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">新机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 0.0%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">0人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">B类机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 8.1%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">3人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">C类机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 40.5%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">15人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">D类机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 16.2%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">6人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">Z类机长</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 0.0%; background: linear-gradient(90deg, #42a5f5, #66bb6a);"></div></div>
+                    </div>
+                    <div class="detail-num">0人</div>
+                </div>
+            </div>
+            
+            <!-- 右侧：副驾驶+学员分类 -->
+            <div class="detail-column">
+                <div class="detail-header">✈️ 副驾驶/学员分类</div>
+                
+                <div class="detail-subheader">副驾驶</div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">A1</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 9.3%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">5人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">A2</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 9.3%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">5人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">B</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 75.9%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">41人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">C</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 5.6%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">3人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">D</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 0.0%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">0人</div>
+                </div>
+                <div class="detail-item indent">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">E</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 0.0%; background: linear-gradient(90deg, #26c6da, #00bcd4);"></div></div>
+                    </div>
+                    <div class="detail-num">0人</div>
+                </div>
+                
+                <div class="detail-item" style="margin-top: 15px;">
+                    <div class="detail-bar-wrap">
+                        <div class="detail-label">学员</div>
+                        <div class="detail-bar-bg"><div class="detail-bar-fill" style="width: 3.2%; background: linear-gradient(90deg, #78909c, #b0bec5);"></div></div>
+                    </div>
+                    <div class="detail-num">3人</div>
+                </div>
+            </div>
         </div>
     </div>
     
     <div class="card animate-in">
         <div class="card-title"><div class="icon">📈</div>近12个月人员趋势</div>
-        <div class="chart-container tall"><canvas id="a350_trend"></canvas></div>
+        <div class="chart-container tall">
+            <canvas id="a350_trend"></canvas>
+        </div>
     </div>
     
     <div class="section-header animate-in">
@@ -1961,15 +2455,12 @@ body::before {
     </div>
 
 <script>
-// 检测Chart.js是否加载成功
 if (typeof Chart === 'undefined') {
     document.getElementById('offline-notice').style.display = 'block';
 }
-
 Chart.defaults.color = '#90a4ae';
 Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
 Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif";
-
 const chartColors = ["#42a5f5", "#66bb6a", "#ffa726", "#ef5350", "#ab47bc", "#26c6da", "#ffee58", "#8d6e63", "#78909c", "#ec407a", "#7e57c2", "#26a69a"];
 
 function createPieChart(ctx, labels, values, title) {
@@ -2026,8 +2517,8 @@ function createLineChart(ctx, labels, values, title) {
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    createPieChart(document.getElementById('a320_structure').getContext('2d'), ['机长', '副驾驶', '学员', '教员'], [156, 195, 66, 15], '人员结构');
-    createPieChart(document.getElementById('a320_instructor').getContext('2d'), ["A类教员", "B类教员", "C类教员"], [3, 7, 5], '教员结构');
+    createPieChart(document.getElementById('a320_structure').getContext('2d'), ['机长（含教员/检查员）', '副驾驶', '学员'], [157, 195, 66], '人员结构');
+    createPieChart(document.getElementById('a320_instructor').getContext('2d'), ['A教', 'B教', 'C教'], [41, 30, 8], '教员结构');
     createLineChart(document.getElementById('a320_trend').getContext('2d'), ["2024.07", "2024.08", "2024.09", "2024.10", "2024.11", "2024.12", "2025.01", "2025.02", "2025.03", "2025.04", "2025.05", "2025.06"], [398, 400, 402, 404, 406, 408, 410, 412, 414, 416, 417, 418], '月度趋势');
     createBarChart(document.getElementById('a320_captain_comm').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [142, 138, 45, 52, 128, 95, 62, 48, 35, 28, 15, 8], '通信资格', true);
     createBarChart(document.getElementById('a320_captain_manip').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚"], [128, 115, 38, 42], '操纵资格', true);
@@ -2035,18 +2526,18 @@ document.addEventListener('DOMContentLoaded', function() {
     createBarChart(document.getElementById('a320_fo_report').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [145, 132, 48, 52, 125, 78, 48, 38, 28, 22, 10, 5], '报务资格', true);
 
 
-    createPieChart(document.getElementById('a330_structure').getContext('2d'), ['机长', '副驾驶', '学员', '教员'], [105, 109, 0, 10], '人员结构');
-    createPieChart(document.getElementById('a330_instructor').getContext('2d'), ["A类教员", "B类教员", "C类教员"], [2, 5, 3], '教员结构');
-    createLineChart(document.getElementById('a330_trend').getContext('2d'), ["2024.07", "2024.08", "2024.09", "2024.10", "2024.11", "2024.12", "2025.01", "2025.02", "2025.03", "2025.04", "2025.05", "2025.06"], [198, 200, 202, 204, 206, 208, 210, 211, 212, 213, 213, 214], '月度趋势');
+    createPieChart(document.getElementById('a330_structure').getContext('2d'), ['机长（含教员/检查员）', '副驾驶', '学员'], [103, 109, 2], '人员结构');
+    createPieChart(document.getElementById('a330_instructor').getContext('2d'), ['A教', 'B教', 'C教'], [36, 26, 9], '教员结构');
+    createLineChart(document.getElementById('a330_trend').getContext('2d'), ["2024.07", "2024.08", "2024.09", "2024.10", "2024.11", "2024.12", "2025.01", "2025.02", "2025.03", "2024.04", "2025.05", "2025.06"], [198, 200, 202, 204, 206, 208, 210, 211, 212, 213, 213, 214], '月度趋势');
     createBarChart(document.getElementById('a330_captain_comm').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [95, 88, 32, 38, 82, 58, 42, 35, 25, 18, 10, 5], '通信资格', true);
     createBarChart(document.getElementById('a330_captain_manip').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚"], [85, 75, 28, 32], '操纵资格', true);
     createBarChart(document.getElementById('a330_fo_comm').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [98, 92, 35, 42, 88, 62, 45, 38, 28, 20, 8, 4], '英语通信资格', true);
     createBarChart(document.getElementById('a330_fo_report').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [85, 78, 32, 35, 75, 52, 38, 32, 22, 18, 6, 3], '报务资格', true);
 
 
-    createPieChart(document.getElementById('a350_structure').getContext('2d'), ['机长', '副驾驶', '学员', '教员'], [37, 54, 3, 0], '人员结构');
-    createPieChart(document.getElementById('a350_instructor').getContext('2d'), ["A类教员", "B类教员", "C类教员"], [0, 0, 0], '教员结构');
-    createLineChart(document.getElementById('a350_trend').getContext('2d'), ["2024.07", "2024.08", "2024.09", "2024.10", "2024.11", "2024.12", "2025.01", "2025.02", "2025.03", "2025.04", "2025.05", "2025.06"], [82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94], '月度趋势');
+    createPieChart(document.getElementById('a350_structure').getContext('2d'), ['机长（含教员/检查员）', '副驾驶', '学员'], [37, 54, 3], '人员结构');
+    createPieChart(document.getElementById('a350_instructor').getContext('2d'), ['A教', 'B教', 'C教'], [12, 1, 0], '教员结构');
+    createLineChart(document.getElementById('a350_trend').getContext('2d'), ["2024.07", "2024.08", "2024.09", "2024.10", "2024.11", "2024.12", "2025.01", "2025.02", "2025.03", "2024.04", "2025.05", "2025.06"], [82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94], '月度趋势');
     createBarChart(document.getElementById('a350_captain_comm').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [35, 32, 12, 15, 28, 22, 18, 15, 10, 8, 5, 2], '通信资格', true);
     createBarChart(document.getElementById('a350_captain_manip').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚"], [32, 28, 10, 12], '操纵资格', true);
     createBarChart(document.getElementById('a350_fo_comm').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [48, 45, 18, 22, 42, 32, 25, 20, 15, 12, 6, 3], '英语通信资格', true);
@@ -2056,4 +2547,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </div>
 </body>
-</html>
+</html> → Commit changes
