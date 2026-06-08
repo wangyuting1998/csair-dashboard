@@ -117,6 +117,32 @@ body::before {
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
 }
 .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+/* 哑铃图样式 */
+.dumbbell-chart { padding: 20px 0; }
+.dumbbell-row { display: flex; align-items: center; margin-bottom: 28px; position: relative; }
+.dumbbell-row:last-child { margin-bottom: 0; }
+.dumbbell-label { width: 80px; font-size: 0.9rem; font-weight: 600; color: var(--text-secondary); text-align: right; padding-right: 16px; }
+.dumbbell-track { flex: 1; position: relative; height: 40px; display: flex; align-items: center; }
+.dumbbell-line { position: absolute; top: 50%; left: 0; right: 0; height: 3px; border-radius: 2px; transform: translateY(-50%); }
+.dumbbell-line.up { background: linear-gradient(90deg, rgba(76,175,80,0.3), rgba(76,175,80,0.6)); }
+.dumbbell-line.down { background: linear-gradient(90deg, rgba(244,67,54,0.3), rgba(244,67,54,0.6)); }
+.dumbbell-line.flat { background: rgba(255,255,255,0.15); }
+.dumbbell-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 16px; height: 16px; border-radius: 50%; border: 3px solid; background: var(--bg-deep); z-index: 2; transition: all 0.4s ease; }
+.dumbbell-dot:hover { transform: translate(-50%, -50%) scale(1.3); }
+.dumbbell-dot.instructor { border-color: #ff9800; box-shadow: 0 0 10px rgba(255,152,0,0.4); }
+.dumbbell-dot.captain { border-color: #42a5f5; box-shadow: 0 0 10px rgba(66,165,245,0.4); }
+.dumbbell-dot.copilot { border-color: #26c6da; box-shadow: 0 0 10px rgba(38,198,218,0.4); }
+.dumbbell-value { position: absolute; top: -18px; transform: translateX(-50%); font-size: 0.85rem; font-weight: 700; color: #fff; white-space: nowrap; }
+.dumbbell-value.month-label { top: auto; bottom: -20px; font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; }
+.dumbbell-change { width: 80px; text-align: center; padding: 6px 10px; margin-left: 12px; font-size: 1rem; font-weight: 800; border-radius: 10px; letter-spacing: 0.5px; transition: all 0.3s ease; }
+.dumbbell-change.up { color: #fff; background: linear-gradient(135deg, rgba(76,175,80,0.25), rgba(76,175,80,0.45)); border: 1px solid rgba(76,175,80,0.5); box-shadow: 0 0 15px rgba(76,175,80,0.2); }
+.dumbbell-change.down { color: #fff; background: linear-gradient(135deg, rgba(244,67,54,0.25), rgba(244,67,54,0.45)); border: 1px solid rgba(244,67,54,0.5); box-shadow: 0 0 15px rgba(244,67,54,0.2); }
+.dumbbell-change.flat { color: var(--text-secondary); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+.dumbbell-legend { display: flex; justify-content: center; gap: 24px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+.dumbbell-legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-secondary); }
+.dumbbell-legend-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid; }
+
 @media (max-width: 768px) {
     .compare-grid { grid-template-columns: 1fr; }
     .chart-grid { grid-template-columns: 1fr; }
@@ -178,6 +204,30 @@ body::before {
     font-size: 0.9rem; font-weight: 700; color: var(--primary-light);
     width: 50px; text-align: right; flex-shrink: 0;
 }
+
+/* 月度趋势汇总 */
+.trend-summary {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    text-align: center;
+}
+.trend-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.trend-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+.trend-arrow {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
 </style>
 </head>
 <body>
@@ -226,20 +276,61 @@ body::before {
         </div>
     </div>
     
+    <!-- 近两个月教员/机长/副驾驶人数趋势 -->
     <div class="chart-grid">
-        <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">📊</div>人员结构分布（互斥分类）</div>
-            <div class="chart-container">
-                <canvas id="a320_structure"></canvas>
+        <div class="card animate-in delay-1" style="grid-column: 1 / -1;">
+            <div class="card-title"><div class="icon">📊</div>近两个月教员、机长、副驾驶人数趋势</div>
+            <div class="dumbbell-chart">
+                <div class="dumbbell-row">
+                    <div class="dumbbell-label">教员</div>
+                    <div class="dumbbell-track">
+                        <div class="dumbbell-line flat"></div>
+                        <div class="dumbbell-dot instructor" style="left: 30%;">
+                            <div class="dumbbell-value">79</div>
+                            <div class="dumbbell-value month-label">4月</div>
+                        </div>
+                        <div class="dumbbell-dot instructor" style="left: 30%;">
+                            <div class="dumbbell-value">79</div>
+                            <div class="dumbbell-value month-label">5月</div>
+                        </div>
+                    </div>
+                    <div class="dumbbell-change flat">→ 0</div>
+                </div>
+                <div class="dumbbell-row">
+                    <div class="dumbbell-label">机长</div>
+                    <div class="dumbbell-track">
+                        <div class="dumbbell-line up"></div>
+                        <div class="dumbbell-dot captain" style="left: 25%;">
+                            <div class="dumbbell-value">153</div>
+                            <div class="dumbbell-value month-label">4月</div>
+                        </div>
+                        <div class="dumbbell-dot captain" style="left: 35%;">
+                            <div class="dumbbell-value">157</div>
+                            <div class="dumbbell-value month-label">5月</div>
+                        </div>
+                    </div>
+                    <div class="dumbbell-change up">▲ +4</div>
+                </div>
+                <div class="dumbbell-row">
+                    <div class="dumbbell-label">副驾驶</div>
+                    <div class="dumbbell-track">
+                        <div class="dumbbell-line up"></div>
+                        <div class="dumbbell-dot copilot" style="left: 20%;">
+                            <div class="dumbbell-value">187</div>
+                            <div class="dumbbell-value month-label">4月</div>
+                        </div>
+                        <div class="dumbbell-dot copilot" style="left: 40%;">
+                            <div class="dumbbell-value">195</div>
+                            <div class="dumbbell-value month-label">5月</div>
+                        </div>
+                    </div>
+                    <div class="dumbbell-change up">▲ +8</div>
+                </div>
             </div>
-            <div style="text-align: center; margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary);">
-                机长 157 人 + 副驾驶 195 人 + 学员 66 人 = 418 人
-            </div>
-        </div>
-        <div class="card animate-in delay-2">
-            <div class="card-title"><div class="icon">👨‍🏫</div>教员结构</div>
-            <div class="chart-container">
-                <canvas id="a320_instructor"></canvas>
+            <div class="dumbbell-legend">
+                <div class="dumbbell-legend-item"><div class="dumbbell-legend-dot" style="border-color: #ff9800;"></div>教员</div>
+                <div class="dumbbell-legend-item"><div class="dumbbell-legend-dot" style="border-color: #42a5f5;"></div>机长</div>
+                <div class="dumbbell-legend-item"><div class="dumbbell-legend-dot" style="border-color: #26c6da;"></div>副驾驶</div>
             </div>
         </div>
     </div>
@@ -390,13 +481,6 @@ body::before {
         </div>
     </div>
     
-    <div class="card animate-in">
-        <div class="card-title"><div class="icon">📈</div>近12个月人员趋势</div>
-        <div class="chart-container tall">
-            <canvas id="a320_trend"></canvas>
-        </div>
-    </div>
-    
     <div class="section-header animate-in">
         <div class="section-badge" style="background: linear-gradient(135deg, #1565c0, #00bcd4);">机长资质</div>
         <div class="section-title">A320 机长资质明细</div>
@@ -404,134 +488,110 @@ body::before {
     </div>
     
     <div class="compare-grid">
-        <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">🎧</div>通信资格 - 各区域人数</div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">142人 (90.4%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 90.4%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">日韩</span>
-                    <span class="progress-value">138人 (87.9%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 87.9%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">45人 (28.7%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 28.7%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南亚</span>
-                    <span class="progress-value">52人 (33.1%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 33.1%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">欧洲</span>
-                    <span class="progress-value">128人 (81.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 81.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">北美</span>
-                    <span class="progress-value">95人 (60.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 60.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">澳新</span>
-                    <span class="progress-value">62人 (39.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 39.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">中东</span>
-                    <span class="progress-value">48人 (30.6%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 30.6%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">非洲</span>
-                    <span class="progress-value">35人 (22.3%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 22.3%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南美</span>
-                    <span class="progress-value">28人 (17.8%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 17.8%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">极地</span>
-                    <span class="progress-value">15人 (9.6%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 9.6%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">其他</span>
-                    <span class="progress-value">8人 (5.1%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 5.1%"></div></div>
-            </div>
-        </div>
-        <div class="card animate-in delay-2">
-            <div class="card-title"><div class="icon">✋</div>操纵资格 - 各区域人数</div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">128人 (81.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 81.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">日韩</span>
-                    <span class="progress-value">115人 (73.2%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 73.2%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">38人 (24.2%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 24.2%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南亚</span>
-                    <span class="progress-value">42人 (26.8%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 26.8%"></div></div>
+        <div class="card animate-in delay-1" style="grid-column: 1 / -1;">
+            <div class="card-title"><div class="icon">🎧</div>通信资格 - 按机长级别分区域统计</div>
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>级别</th>
+                            <th>人数</th>
+                            <th>东南亚及港澳台</th>
+                            <th>日韩</th>
+                            <th>俄罗斯_中亚_蒙古</th>
+                            <th>南亚</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag tag-blue">CAPTB</span></td>
+                            <td><strong>29</strong> 人</td>
+                            <td>25人 <span style="color: #81c784;">(86.2%)</span></td>
+                            <td>23人 <span style="color: #81c784;">(79.3%)</span></td>
+                            <td>23人 <span style="color: #81c784;">(79.3%)</span></td>
+                            <td>16人 <span style="color: #ffa726;">(55.2%)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-blue">CAPTA</span></td>
+                            <td><strong>41</strong> 人</td>
+                            <td>37人 <span style="color: #81c784;">(90.2%)</span></td>
+                            <td>28人 <span style="color: #81c784;">(68.3%)</span></td>
+                            <td>34人 <span style="color: #81c784;">(82.9%)</span></td>
+                            <td>5人 <span style="color: #ef5350;">(12.2%)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-blue">CAPD</span></td>
+                            <td><strong>35</strong> 人</td>
+                            <td>11人 <span style="color: #ffa726;">(31.4%)</span></td>
+                            <td>5人 <span style="color: #ef5350;">(14.3%)</span></td>
+                            <td>5人 <span style="color: #ef5350;">(14.3%)</span></td>
+                            <td>0人 <span style="color: #ef5350;">(0.0%)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-blue">CAPC</span></td>
+                            <td><strong>27</strong> 人</td>
+                            <td>11人 <span style="color: #ffa726;">(40.7%)</span></td>
+                            <td>9人 <span style="color: #ef5350;">(33.3%)</span></td>
+                            <td>8人 <span style="color: #ef5350;">(29.6%)</span></td>
+                            <td>5人 <span style="color: #ef5350;">(18.5%)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
     
-    <div class="chart-grid">
-        <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">📊</div>通信资格区域分布</div>
-            <div class="chart-container tall"><canvas id="a320_captain_comm"></canvas></div>
-        </div>
-        <div class="card animate-in delay-2">
-            <div class="card-title"><div class="icon">📊</div>操纵资格区域分布</div>
-            <div class="chart-container tall"><canvas id="a320_captain_manip"></canvas></div>
+    <div class="compare-grid">
+        <div class="card animate-in delay-2" style="grid-column: 1 / -1;">
+            <div class="card-title"><div class="icon">✋</div>操纵资格 - 按机长级别分区域统计</div>
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>级别</th>
+                            <th>人数</th>
+                            <th>东南亚及港澳台</th>
+                            <th>日韩</th>
+                            <th>俄罗斯_中亚_蒙古</th>
+                            <th>南亚</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag tag-blue">CAPTB</span></td>
+                            <td><strong>29</strong> 人</td>
+                            <td>24人 <span style="color: #81c784;">(82.8%)</span></td>
+                            <td>23人 <span style="color: #81c784;">(79.3%)</span></td>
+                            <td>23人 <span style="color: #81c784;">(79.3%)</span></td>
+                            <td>16人 <span style="color: #ffa726;">(55.2%)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-blue">CAPTA</span></td>
+                            <td><strong>41</strong> 人</td>
+                            <td>37人 <span style="color: #81c784;">(90.2%)</span></td>
+                            <td>26人 <span style="color: #81c784;">(63.4%)</span></td>
+                            <td>34人 <span style="color: #81c784;">(82.9%)</span></td>
+                            <td>4人 <span style="color: #ef5350;">(9.8%)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-blue">CAPD</span></td>
+                            <td><strong>35</strong> 人</td>
+                            <td>8人 <span style="color: #ef5350;">(22.9%)</span></td>
+                            <td>5人 <span style="color: #ef5350;">(14.3%)</span></td>
+                            <td>2人 <span style="color: #ef5350;">(5.7%)</span></td>
+                            <td>0人 <span style="color: #ef5350;">(0.0%)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-blue">CAPC</span></td>
+                            <td><strong>27</strong> 人</td>
+                            <td>0人 <span style="color: #ef5350;">(0.0%)</span></td>
+                            <td>0人 <span style="color: #ef5350;">(0.0%)</span></td>
+                            <td>0人 <span style="color: #ef5350;">(0.0%)</span></td>
+                            <td>0人 <span style="color: #ef5350;">(0.0%)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     
@@ -542,190 +602,82 @@ body::before {
     </div>
     
     <div class="compare-grid">
-        <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">🌐</div>英语通信资格 - 各区域人数</div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">168人 (86.2%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 86.2%"></div></div>
+        <div class="card animate-in delay-2" style="grid-column: 1 / -1;">
+            <div class="card-title"><div class="icon">📻</div>报务资格 - 按副驾驶级别分区域统计</div>
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>级别</th>
+                            <th>人数</th>
+                            <th>东南亚及港澳台</th>
+                            <th>日韩</th>
+                            <th>俄罗斯_中亚_蒙古</th>
+                            <th>南亚</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag tag-blue">FOD</span></td>
+                            <td><strong>35</strong> 人</td>
+                            <td>30人 <span style="color: #81c784;">(85.7%)</span></td>
+                            <td>25人 <span style="color: #81c784;">(71.4%)</span></td>
+                            <td>26人 <span style="color: #81c784;">(74.3%)</span></td>
+                            <td>1人 <span style="color: #ef5350;">(2.9%)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-blue">FOC</span></td>
+                            <td><strong>40</strong> 人</td>
+                            <td>33人 <span style="color: #81c784;">(82.5%)</span></td>
+                            <td>32人 <span style="color: #81c784;">(80.0%)</span></td>
+                            <td>31人 <span style="color: #81c784;">(77.5%)</span></td>
+                            <td>10人 <span style="color: #ffa726;">(25.0%)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-blue">FOB</span></td>
+                            <td><strong>27</strong> 人</td>
+                            <td>19人 <span style="color: #81c784;">(70.4%)</span></td>
+                            <td>15人 <span style="color: #ffa726;">(55.6%)</span></td>
+                            <td>12人 <span style="color: #ffa726;">(44.4%)</span></td>
+                            <td>2人 <span style="color: #ef5350;">(7.4%)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-blue">FOA2</span></td>
+                            <td><strong>55</strong> 人</td>
+                            <td>16人 <span style="color: #ffa726;">(29.1%)</span></td>
+                            <td>12人 <span style="color: #ffa726;">(21.8%)</span></td>
+                            <td>9人 <span style="color: #ef5350;">(16.4%)</span></td>
+                            <td>0人 <span style="color: #ef5350;">(0.0%)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-blue">FOA1</span></td>
+                            <td><strong>24</strong> 人</td>
+                            <td>2人 <span style="color: #ef5350;">(8.3%)</span></td>
+                            <td>10人 <span style="color: #ffa726;">(41.7%)</span></td>
+                            <td>10人 <span style="color: #ffa726;">(41.7%)</span></td>
+                            <td>0人 <span style="color: #ef5350;">(0.0%)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">日韩</span>
-                    <span class="progress-value">155人 (79.5%)</span>
+            <div style="margin-top: 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+                <div class="trend-summary">
+                    <div class="trend-label">FOD 合计</div>
+                    <div class="trend-value" style="color: #42a5f5;">35人</div>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 79.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">52人 (26.7%)</span>
+                <div class="trend-summary">
+                    <div class="trend-label">FOC 合计</div>
+                    <div class="trend-value" style="color: #42a5f5;">40人</div>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 26.7%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南亚</span>
-                    <span class="progress-value">58人 (29.7%)</span>
+                <div class="trend-summary">
+                    <div class="trend-label">FOB 合计</div>
+                    <div class="trend-value" style="color: #42a5f5;">27人</div>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 29.7%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">欧洲</span>
-                    <span class="progress-value">142人 (72.8%)</span>
+                <div class="trend-summary">
+                    <div class="trend-label">FOA2+FOA1</div>
+                    <div class="trend-value" style="color: #42a5f5;">79人</div>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 72.8%"></div></div>
             </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">北美</span>
-                    <span class="progress-value">88人 (45.1%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 45.1%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">澳新</span>
-                    <span class="progress-value">55人 (28.2%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 28.2%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">中东</span>
-                    <span class="progress-value">42人 (21.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 21.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">非洲</span>
-                    <span class="progress-value">32人 (16.4%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 16.4%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南美</span>
-                    <span class="progress-value">25人 (12.8%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 12.8%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">极地</span>
-                    <span class="progress-value">12人 (6.2%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 6.2%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">其他</span>
-                    <span class="progress-value">6人 (3.1%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 3.1%"></div></div>
-            </div>
-        </div>
-        <div class="card animate-in delay-2">
-            <div class="card-title"><div class="icon">📻</div>报务资格 - 各区域人数</div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">145人 (74.4%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 74.4%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">日韩</span>
-                    <span class="progress-value">132人 (67.7%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 67.7%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">48人 (24.6%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 24.6%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南亚</span>
-                    <span class="progress-value">52人 (26.7%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 26.7%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">欧洲</span>
-                    <span class="progress-value">125人 (64.1%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 64.1%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">北美</span>
-                    <span class="progress-value">78人 (40.0%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 40.0%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">澳新</span>
-                    <span class="progress-value">48人 (24.6%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 24.6%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">中东</span>
-                    <span class="progress-value">38人 (19.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 19.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">非洲</span>
-                    <span class="progress-value">28人 (14.4%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 14.4%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南美</span>
-                    <span class="progress-value">22人 (11.3%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 11.3%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">极地</span>
-                    <span class="progress-value">10人 (5.1%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 5.1%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">其他</span>
-                    <span class="progress-value">5人 (2.6%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 2.6%"></div></div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="chart-grid">
-        <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">📊</div>英语通信资格区域分布</div>
-            <div class="chart-container tall"><canvas id="a320_fo_comm"></canvas></div>
-        </div>
-        <div class="card animate-in delay-2">
-            <div class="card-title"><div class="icon">📊</div>报务资格区域分布</div>
-            <div class="chart-container tall"><canvas id="a320_fo_report"></canvas></div>
         </div>
     </div>
     
@@ -742,202 +694,42 @@ body::before {
                 <thead><tr><th>机场名称</th><th>具备资质人数</th><th>覆盖率</th></tr></thead>
                 <tbody>
                     <tr>
-                        <td><span class="tag tag-blue">香港/VHHH</span></td>
-                        <td><strong>142</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">91.0%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 91.0%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">台北/RCTP</span></td>
-                        <td><strong>138</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">88.5%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 88.5%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">首尔/RKSI</span></td>
-                        <td><strong>128</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">82.1%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 82.1%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">东京/RJAA</span></td>
-                        <td><strong>115</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">73.7%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 73.7%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">新加坡/WSSS</span></td>
-                        <td><strong>108</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">69.2%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 69.2%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">曼谷/VTBS</span></td>
-                        <td><strong>95</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">60.9%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 60.9%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">吉隆坡/WMKK</span></td>
-                        <td><strong>88</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">56.4%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 56.4%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">马尼拉/RPLL</span></td>
-                        <td><strong>82</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">52.6%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 52.6%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">河内/VVNB</span></td>
-                        <td><strong>78</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">50.0%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 50.0%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">胡志明/VVTS</span></td>
+                        <td><span class="tag tag-blue">昆明/ZPPP</span></td>
                         <td><strong>72</strong> 人</td>
                         <td>
                             <div class="rate">
-                                <span style="margin-right: 8px;">46.2%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 46.2%"></div></div>
+                                <span style="margin-right: 8px;">45.9%</span>
+                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 45.9%"></div></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="tag tag-blue">雅加达/WIII</span></td>
-                        <td><strong>65</strong> 人</td>
+                        <td><span class="tag tag-blue">西宁/ZLXN</span></td>
+                        <td><strong>36</strong> 人</td>
                         <td>
                             <div class="rate">
-                                <span style="margin-right: 8px;">41.7%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 41.7%"></div></div>
+                                <span style="margin-right: 8px;">22.9%</span>
+                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 22.9%"></div></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="tag tag-blue">巴厘岛/WADD</span></td>
-                        <td><strong>58</strong> 人</td>
+                        <td><span class="tag tag-blue">文山/ZPWS</span></td>
+                        <td><strong>33</strong> 人</td>
                         <td>
                             <div class="rate">
-                                <span style="margin-right: 8px;">37.2%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 37.2%"></div></div>
+                                <span style="margin-right: 8px;">21.0%</span>
+                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 21.0%"></div></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="tag tag-blue">普吉/VTSP</span></td>
-                        <td><strong>52</strong> 人</td>
+                        <td><span class="tag tag-blue">芒市/ZPMS</span></td>
+                        <td><strong>57</strong> 人</td>
                         <td>
                             <div class="rate">
-                                <span style="margin-right: 8px;">33.3%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 33.3%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">金边/VDPP</span></td>
-                        <td><strong>48</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">30.8%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 30.8%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">暹粒/VDSR</span></td>
-                        <td><strong>42</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">26.9%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 26.9%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">乌兰巴托/ZMUB</span></td>
-                        <td><strong>38</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">24.4%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 24.4%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">阿拉木图/UAAA</span></td>
-                        <td><strong>35</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">22.4%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 22.4%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">塔什干/UTTT</span></td>
-                        <td><strong>32</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">20.5%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 20.5%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">伊斯兰堡/OPIS</span></td>
-                        <td><strong>28</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">17.9%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 17.9%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">卡拉奇/OPKC</span></td>
-                        <td><strong>25</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">16.0%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 16.0%"></div></div>
+                                <span style="margin-right: 8px;">36.3%</span>
+                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 36.3%"></div></div>
                             </div>
                         </td>
                     </tr>
@@ -980,20 +772,61 @@ body::before {
         </div>
     </div>
     
+    <!-- 近两个月教员/机长/副驾驶人数趋势 -->
     <div class="chart-grid">
-        <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">📊</div>人员结构分布（互斥分类）</div>
-            <div class="chart-container">
-                <canvas id="a330_structure"></canvas>
+        <div class="card animate-in delay-1" style="grid-column: 1 / -1;">
+            <div class="card-title"><div class="icon">📊</div>近两个月教员、机长、副驾驶人数趋势</div>
+            <div class="dumbbell-chart">
+                <div class="dumbbell-row">
+                    <div class="dumbbell-label">教员</div>
+                    <div class="dumbbell-track">
+                        <div class="dumbbell-line up"></div>
+                        <div class="dumbbell-dot instructor" style="left: 30%;">
+                            <div class="dumbbell-value">70</div>
+                            <div class="dumbbell-value month-label">4月</div>
+                        </div>
+                        <div class="dumbbell-dot instructor" style="left: 32%;">
+                            <div class="dumbbell-value">71</div>
+                            <div class="dumbbell-value month-label">5月</div>
+                        </div>
+                    </div>
+                    <div class="dumbbell-change up">▲ +1</div>
+                </div>
+                <div class="dumbbell-row">
+                    <div class="dumbbell-label">机长</div>
+                    <div class="dumbbell-track">
+                        <div class="dumbbell-line up"></div>
+                        <div class="dumbbell-dot captain" style="left: 25%;">
+                            <div class="dumbbell-value">101</div>
+                            <div class="dumbbell-value month-label">4月</div>
+                        </div>
+                        <div class="dumbbell-dot captain" style="left: 30%;">
+                            <div class="dumbbell-value">103</div>
+                            <div class="dumbbell-value month-label">5月</div>
+                        </div>
+                    </div>
+                    <div class="dumbbell-change up">▲ +2</div>
+                </div>
+                <div class="dumbbell-row">
+                    <div class="dumbbell-label">副驾驶</div>
+                    <div class="dumbbell-track">
+                        <div class="dumbbell-line down"></div>
+                        <div class="dumbbell-dot copilot" style="left: 35%;">
+                            <div class="dumbbell-value">111</div>
+                            <div class="dumbbell-value month-label">4月</div>
+                        </div>
+                        <div class="dumbbell-dot copilot" style="left: 30%;">
+                            <div class="dumbbell-value">109</div>
+                            <div class="dumbbell-value month-label">5月</div>
+                        </div>
+                    </div>
+                    <div class="dumbbell-change down">▼ -2</div>
+                </div>
             </div>
-            <div style="text-align: center; margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary);">
-                机长 103 人 + 副驾驶 109 人 + 学员 2 人 = 214 人
-            </div>
-        </div>
-        <div class="card animate-in delay-2">
-            <div class="card-title"><div class="icon">👨‍🏫</div>教员结构</div>
-            <div class="chart-container">
-                <canvas id="a330_instructor"></canvas>
+            <div class="dumbbell-legend">
+                <div class="dumbbell-legend-item"><div class="dumbbell-legend-dot" style="border-color: #ff9800;"></div>教员</div>
+                <div class="dumbbell-legend-item"><div class="dumbbell-legend-dot" style="border-color: #42a5f5;"></div>机长</div>
+                <div class="dumbbell-legend-item"><div class="dumbbell-legend-dot" style="border-color: #26c6da;"></div>副驾驶</div>
             </div>
         </div>
     </div>
@@ -1144,13 +977,6 @@ body::before {
         </div>
     </div>
     
-    <div class="card animate-in">
-        <div class="card-title"><div class="icon">📈</div>近12个月人员趋势</div>
-        <div class="chart-container tall">
-            <canvas id="a330_trend"></canvas>
-        </div>
-    </div>
-    
     <div class="section-header animate-in">
         <div class="section-badge" style="background: linear-gradient(135deg, #1565c0, #00bcd4);">机长资质</div>
         <div class="section-title">A330 机长资质明细</div>
@@ -1163,86 +989,30 @@ body::before {
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">95人 (92.2%)</span>
+                    <span class="progress-value">13人 (12.4%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 92.2%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 12.4%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">日韩</span>
-                    <span class="progress-value">88人 (85.4%)</span>
+                    <span class="progress-value">60人 (57.1%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 85.4%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 57.1%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">32人 (31.1%)</span>
+                    <span class="progress-value">77人 (73.3%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 31.1%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 73.3%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">南亚</span>
-                    <span class="progress-value">38人 (36.9%)</span>
+                    <span class="progress-value">9人 (8.6%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 36.9%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">欧洲</span>
-                    <span class="progress-value">82人 (79.6%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 79.6%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">北美</span>
-                    <span class="progress-value">58人 (56.3%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 56.3%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">澳新</span>
-                    <span class="progress-value">42人 (40.8%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 40.8%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">中东</span>
-                    <span class="progress-value">35人 (34.0%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 34.0%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">非洲</span>
-                    <span class="progress-value">25人 (24.3%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 24.3%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南美</span>
-                    <span class="progress-value">18人 (17.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 17.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">极地</span>
-                    <span class="progress-value">10人 (9.7%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 9.7%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">其他</span>
-                    <span class="progress-value">5人 (4.9%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 4.9%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 8.6%"></div></div>
             </div>
         </div>
         <div class="card animate-in delay-2">
@@ -1250,42 +1020,31 @@ body::before {
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">85人 (82.5%)</span>
+                    <span class="progress-value">8人 (7.6%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 82.5%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 7.6%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">日韩</span>
-                    <span class="progress-value">75人 (72.8%)</span>
+                    <span class="progress-value">53人 (50.5%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 72.8%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 50.5%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">28人 (27.2%)</span>
+                    <span class="progress-value">56人 (53.3%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 27.2%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 53.3%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">南亚</span>
-                    <span class="progress-value">32人 (31.1%)</span>
+                    <span class="progress-value">5人 (4.8%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 31.1%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 4.8%"></div></div>
             </div>
-        </div>
-    </div>
-    
-    <div class="chart-grid">
-        <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">📊</div>通信资格区域分布</div>
-            <div class="chart-container tall"><canvas id="a330_captain_comm"></canvas></div>
-        </div>
-        <div class="card animate-in delay-2">
-            <div class="card-title"><div class="icon">📊</div>操纵资格区域分布</div>
-            <div class="chart-container tall"><canvas id="a330_captain_manip"></canvas></div>
         </div>
     </div>
     
@@ -1296,190 +1055,36 @@ body::before {
     </div>
     
     <div class="compare-grid">
-        <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">🌐</div>英语通信资格 - 各区域人数</div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">98人 (89.9%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 89.9%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">日韩</span>
-                    <span class="progress-value">92人 (84.4%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 84.4%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">35人 (32.1%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 32.1%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南亚</span>
-                    <span class="progress-value">42人 (38.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 38.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">欧洲</span>
-                    <span class="progress-value">88人 (80.7%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 80.7%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">北美</span>
-                    <span class="progress-value">62人 (56.9%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 56.9%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">澳新</span>
-                    <span class="progress-value">45人 (41.3%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 41.3%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">中东</span>
-                    <span class="progress-value">38人 (34.9%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 34.9%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">非洲</span>
-                    <span class="progress-value">28人 (25.7%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 25.7%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南美</span>
-                    <span class="progress-value">20人 (18.3%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 18.3%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">极地</span>
-                    <span class="progress-value">8人 (7.3%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 7.3%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">其他</span>
-                    <span class="progress-value">4人 (3.7%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 3.7%"></div></div>
-            </div>
-        </div>
         <div class="card animate-in delay-2">
             <div class="card-title"><div class="icon">📻</div>报务资格 - 各区域人数</div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">85人 (78.0%)</span>
+                    <span class="progress-value">11人 (10.1%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 78.0%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 10.1%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">日韩</span>
-                    <span class="progress-value">78人 (71.6%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 71.6%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">32人 (29.4%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 29.4%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南亚</span>
-                    <span class="progress-value">35人 (32.1%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 32.1%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">欧洲</span>
                     <span class="progress-value">75人 (68.8%)</span>
                 </div>
                 <div class="progress-bar"><div class="progress-bar-fill" style="width: 68.8%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
-                    <span class="progress-label">北美</span>
-                    <span class="progress-value">52人 (47.7%)</span>
+                    <span class="progress-label">俄罗斯_中亚_蒙古</span>
+                    <span class="progress-value">47人 (43.1%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 47.7%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 43.1%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
-                    <span class="progress-label">澳新</span>
-                    <span class="progress-value">38人 (34.9%)</span>
+                    <span class="progress-label">南亚</span>
+                    <span class="progress-value">1人 (0.9%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 34.9%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 0.9%"></div></div>
             </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">中东</span>
-                    <span class="progress-value">32人 (29.4%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 29.4%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">非洲</span>
-                    <span class="progress-value">22人 (20.2%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 20.2%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南美</span>
-                    <span class="progress-value">18人 (16.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 16.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">极地</span>
-                    <span class="progress-value">6人 (5.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 5.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">其他</span>
-                    <span class="progress-value">3人 (2.8%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 2.8%"></div></div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="chart-grid">
-        <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">📊</div>英语通信资格区域分布</div>
-            <div class="chart-container tall"><canvas id="a330_fo_comm"></canvas></div>
-        </div>
-        <div class="card animate-in delay-2">
-            <div class="card-title"><div class="icon">📊</div>报务资格区域分布</div>
-            <div class="chart-container tall"><canvas id="a330_fo_report"></canvas></div>
         </div>
     </div>
     
@@ -1496,202 +1101,42 @@ body::before {
                 <thead><tr><th>机场名称</th><th>具备资质人数</th><th>覆盖率</th></tr></thead>
                 <tbody>
                     <tr>
-                        <td><span class="tag tag-blue">香港/VHHH</span></td>
-                        <td><strong>95</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">90.5%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 90.5%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">台北/RCTP</span></td>
-                        <td><strong>92</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">87.6%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 87.6%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">首尔/RKSI</span></td>
-                        <td><strong>85</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">81.0%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 81.0%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">东京/RJAA</span></td>
-                        <td><strong>78</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">74.3%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 74.3%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">新加坡/WSSS</span></td>
-                        <td><strong>72</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">68.6%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 68.6%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">曼谷/VTBS</span></td>
-                        <td><strong>65</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">61.9%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 61.9%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">吉隆坡/WMKK</span></td>
-                        <td><strong>58</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">55.2%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 55.2%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">马尼拉/RPLL</span></td>
-                        <td><strong>52</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">49.5%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 49.5%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">河内/VVNB</span></td>
-                        <td><strong>48</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">45.7%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 45.7%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">胡志明/VVTS</span></td>
+                        <td><span class="tag tag-blue">昆明/ZPPP</span></td>
                         <td><strong>45</strong> 人</td>
                         <td>
                             <div class="rate">
-                                <span style="margin-right: 8px;">42.9%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 42.9%"></div></div>
+                                <span style="margin-right: 8px;">43.7%</span>
+                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 43.7%"></div></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="tag tag-blue">雅加达/WIII</span></td>
-                        <td><strong>38</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">36.2%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 36.2%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">巴厘岛/WADD</span></td>
-                        <td><strong>32</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">30.5%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 30.5%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">普吉/VTSP</span></td>
-                        <td><strong>28</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">26.7%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 26.7%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">金边/VDPP</span></td>
-                        <td><strong>25</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">23.8%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 23.8%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">暹粒/VDSR</span></td>
+                        <td><span class="tag tag-blue">西宁/ZLXN</span></td>
                         <td><strong>22</strong> 人</td>
                         <td>
                             <div class="rate">
-                                <span style="margin-right: 8px;">21.0%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 21.0%"></div></div>
+                                <span style="margin-right: 8px;">21.4%</span>
+                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 21.4%"></div></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="tag tag-blue">乌兰巴托/ZMUB</span></td>
-                        <td><strong>18</strong> 人</td>
+                        <td><span class="tag tag-blue">文山/ZPWS</span></td>
+                        <td><strong>1</strong> 人</td>
                         <td>
                             <div class="rate">
-                                <span style="margin-right: 8px;">17.1%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 17.1%"></div></div>
+                                <span style="margin-right: 8px;">1.0%</span>
+                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 1.0%"></div></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="tag tag-blue">阿拉木图/UAAA</span></td>
-                        <td><strong>15</strong> 人</td>
+                        <td><span class="tag tag-blue">芒市/ZPMS</span></td>
+                        <td><strong>0</strong> 人</td>
                         <td>
                             <div class="rate">
-                                <span style="margin-right: 8px;">14.3%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 14.3%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">塔什干/UTTT</span></td>
-                        <td><strong>12</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">11.4%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 11.4%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">伊斯兰堡/OPIS</span></td>
-                        <td><strong>10</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">9.5%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 9.5%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">卡拉奇/OPKC</span></td>
-                        <td><strong>8</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">7.6%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 7.6%"></div></div>
+                                <span style="margin-right: 8px;">0%</span>
+                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 0%"></div></div>
                             </div>
                         </td>
                     </tr>
@@ -1734,20 +1179,61 @@ body::before {
         </div>
     </div>
     
+    <!-- 近两个月教员/机长/副驾驶人数趋势 -->
     <div class="chart-grid">
-        <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">📊</div>人员结构分布（互斥分类）</div>
-            <div class="chart-container">
-                <canvas id="a350_structure"></canvas>
+        <div class="card animate-in delay-1" style="grid-column: 1 / -1;">
+            <div class="card-title"><div class="icon">📊</div>近两个月教员、机长、副驾驶人数趋势</div>
+            <div class="dumbbell-chart">
+                <div class="dumbbell-row">
+                    <div class="dumbbell-label">教员</div>
+                    <div class="dumbbell-track">
+                        <div class="dumbbell-line up"></div>
+                        <div class="dumbbell-dot instructor" style="left: 20%;">
+                            <div class="dumbbell-value">12</div>
+                            <div class="dumbbell-value month-label">4月</div>
+                        </div>
+                        <div class="dumbbell-dot instructor" style="left: 25%;">
+                            <div class="dumbbell-value">13</div>
+                            <div class="dumbbell-value month-label">5月</div>
+                        </div>
+                    </div>
+                    <div class="dumbbell-change up">▲ +1</div>
+                </div>
+                <div class="dumbbell-row">
+                    <div class="dumbbell-label">机长</div>
+                    <div class="dumbbell-track">
+                        <div class="dumbbell-line flat"></div>
+                        <div class="dumbbell-dot captain" style="left: 35%;">
+                            <div class="dumbbell-value">37</div>
+                            <div class="dumbbell-value month-label">4月</div>
+                        </div>
+                        <div class="dumbbell-dot captain" style="left: 35%;">
+                            <div class="dumbbell-value">37</div>
+                            <div class="dumbbell-value month-label">5月</div>
+                        </div>
+                    </div>
+                    <div class="dumbbell-change flat">→ 0</div>
+                </div>
+                <div class="dumbbell-row">
+                    <div class="dumbbell-label">副驾驶</div>
+                    <div class="dumbbell-track">
+                        <div class="dumbbell-line flat"></div>
+                        <div class="dumbbell-dot copilot" style="left: 40%;">
+                            <div class="dumbbell-value">54</div>
+                            <div class="dumbbell-value month-label">4月</div>
+                        </div>
+                        <div class="dumbbell-dot copilot" style="left: 40%;">
+                            <div class="dumbbell-value">54</div>
+                            <div class="dumbbell-value month-label">5月</div>
+                        </div>
+                    </div>
+                    <div class="dumbbell-change flat">→ 0</div>
+                </div>
             </div>
-            <div style="text-align: center; margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary);">
-                机长 37 人 + 副驾驶 54 人 + 学员 3 人 = 94 人
-            </div>
-        </div>
-        <div class="card animate-in delay-2">
-            <div class="card-title"><div class="icon">👨‍🏫</div>教员结构</div>
-            <div class="chart-container">
-                <canvas id="a350_instructor"></canvas>
+            <div class="dumbbell-legend">
+                <div class="dumbbell-legend-item"><div class="dumbbell-legend-dot" style="border-color: #ff9800;"></div>教员</div>
+                <div class="dumbbell-legend-item"><div class="dumbbell-legend-dot" style="border-color: #42a5f5;"></div>机长</div>
+                <div class="dumbbell-legend-item"><div class="dumbbell-legend-dot" style="border-color: #26c6da;"></div>副驾驶</div>
             </div>
         </div>
     </div>
@@ -1898,13 +1384,6 @@ body::before {
         </div>
     </div>
     
-    <div class="card animate-in">
-        <div class="card-title"><div class="icon">📈</div>近12个月人员趋势</div>
-        <div class="chart-container tall">
-            <canvas id="a350_trend"></canvas>
-        </div>
-    </div>
-    
     <div class="section-header animate-in">
         <div class="section-badge" style="background: linear-gradient(135deg, #1565c0, #00bcd4);">机长资质</div>
         <div class="section-title">A350 机长资质明细</div>
@@ -1917,86 +1396,30 @@ body::before {
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">35人 (94.6%)</span>
+                    <span class="progress-value">21人 (56.8%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 94.6%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 56.8%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">日韩</span>
-                    <span class="progress-value">32人 (86.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 86.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">12人 (32.4%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 32.4%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南亚</span>
-                    <span class="progress-value">15人 (40.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 40.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">欧洲</span>
-                    <span class="progress-value">28人 (75.7%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 75.7%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">北美</span>
-                    <span class="progress-value">22人 (59.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 59.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">澳新</span>
-                    <span class="progress-value">18人 (48.6%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 48.6%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">中东</span>
-                    <span class="progress-value">15人 (40.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 40.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">非洲</span>
-                    <span class="progress-value">10人 (27.0%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 27.0%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南美</span>
-                    <span class="progress-value">8人 (21.6%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 21.6%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">极地</span>
                     <span class="progress-value">5人 (13.5%)</span>
                 </div>
                 <div class="progress-bar"><div class="progress-bar-fill" style="width: 13.5%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
-                    <span class="progress-label">其他</span>
-                    <span class="progress-value">2人 (5.4%)</span>
+                    <span class="progress-label">俄罗斯_中亚_蒙古</span>
+                    <span class="progress-value">7人 (18.9%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 5.4%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 18.9%"></div></div>
+            </div>
+            <div class="progress-item">
+                <div class="progress-header">
+                    <span class="progress-label">南亚</span>
+                    <span class="progress-value">1人 (2.7%)</span>
+                </div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 2.7%"></div></div>
             </div>
         </div>
         <div class="card animate-in delay-2">
@@ -2004,42 +1427,31 @@ body::before {
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">32人 (86.5%)</span>
+                    <span class="progress-value">11人 (29.7%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 86.5%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 29.7%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">日韩</span>
-                    <span class="progress-value">28人 (75.7%)</span>
+                    <span class="progress-value">1人 (2.7%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 75.7%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 2.7%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">10人 (27.0%)</span>
+                    <span class="progress-value">0人 (0%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 27.0%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 0%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">南亚</span>
-                    <span class="progress-value">12人 (32.4%)</span>
+                    <span class="progress-value">0人 (0%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 32.4%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 0%"></div></div>
             </div>
-        </div>
-    </div>
-    
-    <div class="chart-grid">
-        <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">📊</div>通信资格区域分布</div>
-            <div class="chart-container tall"><canvas id="a350_captain_comm"></canvas></div>
-        </div>
-        <div class="card animate-in delay-2">
-            <div class="card-title"><div class="icon">📊</div>操纵资格区域分布</div>
-            <div class="chart-container tall"><canvas id="a350_captain_manip"></canvas></div>
         </div>
     </div>
     
@@ -2050,190 +1462,36 @@ body::before {
     </div>
     
     <div class="compare-grid">
-        <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">🌐</div>英语通信资格 - 各区域人数</div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">48人 (88.9%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 88.9%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">日韩</span>
-                    <span class="progress-value">45人 (83.3%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 83.3%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">18人 (33.3%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 33.3%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南亚</span>
-                    <span class="progress-value">22人 (40.7%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 40.7%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">欧洲</span>
-                    <span class="progress-value">42人 (77.8%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 77.8%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">北美</span>
-                    <span class="progress-value">32人 (59.3%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 59.3%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">澳新</span>
-                    <span class="progress-value">25人 (46.3%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 46.3%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">中东</span>
-                    <span class="progress-value">20人 (37.0%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 37.0%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">非洲</span>
-                    <span class="progress-value">15人 (27.8%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 27.8%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南美</span>
-                    <span class="progress-value">12人 (22.2%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 22.2%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">极地</span>
-                    <span class="progress-value">6人 (11.1%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 11.1%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">其他</span>
-                    <span class="progress-value">3人 (5.6%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 5.6%"></div></div>
-            </div>
-        </div>
         <div class="card animate-in delay-2">
             <div class="card-title"><div class="icon">📻</div>报务资格 - 各区域人数</div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">东南亚及港澳台</span>
-                    <span class="progress-value">42人 (77.8%)</span>
+                    <span class="progress-value">47人 (87.0%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 77.8%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 87.0%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">日韩</span>
-                    <span class="progress-value">38人 (70.4%)</span>
+                    <span class="progress-value">1人 (1.9%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 70.4%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 1.9%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">俄罗斯_中亚_蒙古</span>
-                    <span class="progress-value">15人 (27.8%)</span>
+                    <span class="progress-value">9人 (16.7%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 27.8%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 16.7%"></div></div>
             </div>
             <div class="progress-item">
                 <div class="progress-header">
                     <span class="progress-label">南亚</span>
-                    <span class="progress-value">18人 (33.3%)</span>
+                    <span class="progress-value">0人 (0%)</span>
                 </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 33.3%"></div></div>
+                <div class="progress-bar"><div class="progress-bar-fill" style="width: 0%"></div></div>
             </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">欧洲</span>
-                    <span class="progress-value">35人 (64.8%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 64.8%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">北美</span>
-                    <span class="progress-value">28人 (51.9%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 51.9%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">澳新</span>
-                    <span class="progress-value">22人 (40.7%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 40.7%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">中东</span>
-                    <span class="progress-value">18人 (33.3%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 33.3%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">非洲</span>
-                    <span class="progress-value">12人 (22.2%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 22.2%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">南美</span>
-                    <span class="progress-value">10人 (18.5%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 18.5%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">极地</span>
-                    <span class="progress-value">5人 (9.3%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 9.3%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">其他</span>
-                    <span class="progress-value">2人 (3.7%)</span>
-                </div>
-                <div class="progress-bar"><div class="progress-bar-fill" style="width: 3.7%"></div></div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="chart-grid">
-        <div class="card animate-in delay-1">
-            <div class="card-title"><div class="icon">📊</div>英语通信资格区域分布</div>
-            <div class="chart-container tall"><canvas id="a350_fo_comm"></canvas></div>
-        </div>
-        <div class="card animate-in delay-2">
-            <div class="card-title"><div class="icon">📊</div>报务资格区域分布</div>
-            <div class="chart-container tall"><canvas id="a350_fo_report"></canvas></div>
         </div>
     </div>
     
@@ -2250,202 +1508,42 @@ body::before {
                 <thead><tr><th>机场名称</th><th>具备资质人数</th><th>覆盖率</th></tr></thead>
                 <tbody>
                     <tr>
-                        <td><span class="tag tag-blue">香港/VHHH</span></td>
-                        <td><strong>35</strong> 人</td>
+                        <td><span class="tag tag-blue">昆明/ZPPP</span></td>
+                        <td><strong>1</strong> 人</td>
                         <td>
                             <div class="rate">
-                                <span style="margin-right: 8px;">94.6%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 94.6%"></div></div>
+                                <span style="margin-right: 8px;">2.7%</span>
+                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 2.7%"></div></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="tag tag-blue">台北/RCTP</span></td>
-                        <td><strong>34</strong> 人</td>
+                        <td><span class="tag tag-blue">西宁/ZLXN</span></td>
+                        <td><strong>0</strong> 人</td>
                         <td>
                             <div class="rate">
-                                <span style="margin-right: 8px;">91.9%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 91.9%"></div></div>
+                                <span style="margin-right: 8px;">0%</span>
+                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 0%"></div></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="tag tag-blue">首尔/RKSI</span></td>
-                        <td><strong>32</strong> 人</td>
+                        <td><span class="tag tag-blue">文山/ZPWS</span></td>
+                        <td><strong>0</strong> 人</td>
                         <td>
                             <div class="rate">
-                                <span style="margin-right: 8px;">86.5%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 86.5%"></div></div>
+                                <span style="margin-right: 8px;">0%</span>
+                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 0%"></div></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="tag tag-blue">东京/RJAA</span></td>
-                        <td><strong>30</strong> 人</td>
+                        <td><span class="tag tag-blue">芒市/ZPMS</span></td>
+                        <td><strong>0</strong> 人</td>
                         <td>
                             <div class="rate">
-                                <span style="margin-right: 8px;">81.1%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 81.1%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">新加坡/WSSS</span></td>
-                        <td><strong>28</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">75.7%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 75.7%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">曼谷/VTBS</span></td>
-                        <td><strong>25</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">67.6%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 67.6%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">吉隆坡/WMKK</span></td>
-                        <td><strong>22</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">59.5%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 59.5%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">马尼拉/RPLL</span></td>
-                        <td><strong>20</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">54.1%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 54.1%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">河内/VVNB</span></td>
-                        <td><strong>18</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">48.6%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 48.6%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">胡志明/VVTS</span></td>
-                        <td><strong>17</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">45.9%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 45.9%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">雅加达/WIII</span></td>
-                        <td><strong>15</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">40.5%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 40.5%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">巴厘岛/WADD</span></td>
-                        <td><strong>13</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">35.1%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 35.1%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">普吉/VTSP</span></td>
-                        <td><strong>12</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">32.4%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 32.4%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">金边/VDPP</span></td>
-                        <td><strong>10</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">27.0%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 27.0%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">暹粒/VDSR</span></td>
-                        <td><strong>9</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">24.3%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 24.3%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">乌兰巴托/ZMUB</span></td>
-                        <td><strong>8</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">21.6%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 21.6%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">阿拉木图/UAAA</span></td>
-                        <td><strong>7</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">18.9%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 18.9%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">塔什干/UTTT</span></td>
-                        <td><strong>6</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">16.2%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 16.2%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">伊斯兰堡/OPIS</span></td>
-                        <td><strong>5</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">13.5%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 13.5%"></div></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tag tag-blue">卡拉奇/OPKC</span></td>
-                        <td><strong>4</strong> 人</td>
-                        <td>
-                            <div class="rate">
-                                <span style="margin-right: 8px;">10.8%</span>
-                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 10.8%"></div></div>
+                                <span style="margin-right: 8px;">0%</span>
+                                <div class="rate-bar"><div class="rate-bar-fill" style="width: 0%"></div></div>
                             </div>
                         </td>
                     </tr>
@@ -2499,49 +1597,7 @@ function createBarChart(ctx, labels, values, title, horizontal=false) {
     });
 }
 
-function createLineChart(ctx, labels, values, title) {
-    if (typeof Chart === 'undefined') return;
-    return new Chart(ctx, {
-        type: 'line',
-        data: { labels: labels, datasets: [{ label: '总人数', data: values, borderColor: '#42a5f5', backgroundColor: 'rgba(66,165,245,0.1)', borderWidth: 3, fill: true, tension: 0.4, pointBackgroundColor: '#42a5f5', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 5, pointHoverRadius: 8 }] },
-        options: {
-            responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(10,25,41,0.9)', titleColor: '#fff', bodyColor: '#bbdefb', borderColor: 'rgba(66,165,245,0.3)', borderWidth: 1, padding: 12 } },
-            scales: {
-                x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#90a4ae' } },
-                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#90a4ae' } }
-            }
-        }
-    });
-}
-
 document.addEventListener('DOMContentLoaded', function() {
-
-    createPieChart(document.getElementById('a320_structure').getContext('2d'), ['机长（含教员/检查员）', '副驾驶', '学员'], [157, 195, 66], '人员结构');
-    createPieChart(document.getElementById('a320_instructor').getContext('2d'), ['A教', 'B教', 'C教'], [41, 30, 8], '教员结构');
-    createLineChart(document.getElementById('a320_trend').getContext('2d'), ["2024.07", "2024.08", "2024.09", "2024.10", "2024.11", "2024.12", "2025.01", "2025.02", "2025.03", "2025.04", "2025.05", "2025.06"], [398, 400, 402, 404, 406, 408, 410, 412, 414, 416, 417, 418], '月度趋势');
-    createBarChart(document.getElementById('a320_captain_comm').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [142, 138, 45, 52, 128, 95, 62, 48, 35, 28, 15, 8], '通信资格', true);
-    createBarChart(document.getElementById('a320_captain_manip').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚"], [128, 115, 38, 42], '操纵资格', true);
-    createBarChart(document.getElementById('a320_fo_comm').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [168, 155, 52, 58, 142, 88, 55, 42, 32, 25, 12, 6], '英语通信资格', true);
-    createBarChart(document.getElementById('a320_fo_report').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [145, 132, 48, 52, 125, 78, 48, 38, 28, 22, 10, 5], '报务资格', true);
-
-
-    createPieChart(document.getElementById('a330_structure').getContext('2d'), ['机长（含教员/检查员）', '副驾驶', '学员'], [103, 109, 2], '人员结构');
-    createPieChart(document.getElementById('a330_instructor').getContext('2d'), ['A教', 'B教', 'C教'], [36, 26, 9], '教员结构');
-    createLineChart(document.getElementById('a330_trend').getContext('2d'), ["2024.07", "2024.08", "2024.09", "2024.10", "2024.11", "2024.12", "2025.01", "2025.02", "2025.03", "2024.04", "2025.05", "2025.06"], [198, 200, 202, 204, 206, 208, 210, 211, 212, 213, 213, 214], '月度趋势');
-    createBarChart(document.getElementById('a330_captain_comm').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [95, 88, 32, 38, 82, 58, 42, 35, 25, 18, 10, 5], '通信资格', true);
-    createBarChart(document.getElementById('a330_captain_manip').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚"], [85, 75, 28, 32], '操纵资格', true);
-    createBarChart(document.getElementById('a330_fo_comm').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [98, 92, 35, 42, 88, 62, 45, 38, 28, 20, 8, 4], '英语通信资格', true);
-    createBarChart(document.getElementById('a330_fo_report').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [85, 78, 32, 35, 75, 52, 38, 32, 22, 18, 6, 3], '报务资格', true);
-
-
-    createPieChart(document.getElementById('a350_structure').getContext('2d'), ['机长（含教员/检查员）', '副驾驶', '学员'], [37, 54, 3], '人员结构');
-    createPieChart(document.getElementById('a350_instructor').getContext('2d'), ['A教', 'B教', 'C教'], [12, 1, 0], '教员结构');
-    createLineChart(document.getElementById('a350_trend').getContext('2d'), ["2024.07", "2024.08", "2024.09", "2024.10", "2024.11", "2024.12", "2025.01", "2025.02", "2025.03", "2024.04", "2025.05", "2025.06"], [82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94], '月度趋势');
-    createBarChart(document.getElementById('a350_captain_comm').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [35, 32, 12, 15, 28, 22, 18, 15, 10, 8, 5, 2], '通信资格', true);
-    createBarChart(document.getElementById('a350_captain_manip').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚"], [32, 28, 10, 12], '操纵资格', true);
-    createBarChart(document.getElementById('a350_fo_comm').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [48, 45, 18, 22, 42, 32, 25, 20, 15, 12, 6, 3], '英语通信资格', true);
-    createBarChart(document.getElementById('a350_fo_report').getContext('2d'), ["东南亚及港澳台", "日韩", "俄罗斯_中亚_蒙古", "南亚", "欧洲", "北美", "澳新", "中东", "非洲", "南美", "极地", "其他"], [42, 38, 15, 18, 35, 28, 22, 18, 12, 10, 5, 2], '报务资格', true);
 
 });
 </script>
