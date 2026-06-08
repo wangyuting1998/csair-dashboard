@@ -595,6 +595,87 @@ body::before {
         </div>
     </div>
     
+    <!-- A320 机长通信与操纵区域人数对比 -->
+    <div class="section-header animate-in">
+        <div class="section-badge" style="background: linear-gradient(135deg, #1565c0, #42a5f5);">机长对比</div>
+        <div class="section-title">A320 机长通信与操纵区域人数对比</div>
+        <div class="section-line"></div>
+    </div>
+    
+    <div class="compare-grid">
+        <div class="card animate-in delay-1" style="grid-column: 1 / -1;">
+            <div class="card-title"><div class="icon">📡</div>通信 vs 操纵 - 各区域人数及差值</div>
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>区域</th>
+                            <th>通信人数</th>
+                            <th>操纵人数</th>
+                            <th>差值（通信-操纵）</th>
+                            <th>差值占比</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag tag-blue">东南亚及港澳台</span></td>
+                            <td><strong>94</strong> 人</td>
+                            <td><strong>71</strong> 人</td>
+                            <td><strong style="color: #ef5350;">23</strong> 人</td>
+                            <td>
+                                <div class="rate">
+                                    <span style="margin-right: 8px;">24.5%</span>
+                                    <div class="rate-bar"><div class="rate-bar-fill" style="width: 24.5%"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-blue">日韩</span></td>
+                            <td><strong>73</strong> 人</td>
+                            <td><strong>55</strong> 人</td>
+                            <td><strong style="color: #ef5350;">18</strong> 人</td>
+                            <td>
+                                <div class="rate">
+                                    <span style="margin-right: 8px;">24.7%</span>
+                                    <div class="rate-bar"><div class="rate-bar-fill" style="width: 24.7%"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-blue">俄罗斯_中亚_蒙古</span></td>
+                            <td><strong>77</strong> 人</td>
+                            <td><strong>61</strong> 人</td>
+                            <td><strong style="color: #ef5350;">16</strong> 人</td>
+                            <td>
+                                <div class="rate">
+                                    <span style="margin-right: 8px;">20.8%</span>
+                                    <div class="rate-bar"><div class="rate-bar-fill" style="width: 20.8%"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-blue">南亚</span></td>
+                            <td><strong>30</strong> 人</td>
+                            <td><strong>21</strong> 人</td>
+                            <td><strong style="color: #ef5350;">9</strong> 人</td>
+                            <td>
+                                <div class="rate">
+                                    <span style="margin-right: 8px;">30.0%</span>
+                                    <div class="rate-bar"><div class="rate-bar-fill" style="width: 30.0%"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 20px; padding: 16px; background: rgba(239,83,80,0.08); border-radius: 12px; border-left: 3px solid #ef5350;">
+                <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                    <strong style="color: #ef5350;">⚠️ 重点提示：</strong>各区域通信资格人数均高于操纵资格人数，差值合计 <strong style="color: #ef5350;">66人</strong>。其中东南亚及港澳台区域差值最大（23人），建议关注操纵资格培训进度。
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="section-header animate-in">
         <div class="section-badge" style="background: linear-gradient(135deg, #2e7d32, #66bb6a);">副驾驶资质</div>
         <div class="section-title">A320 副驾驶资质明细</div>
@@ -676,6 +757,110 @@ body::before {
                 <div class="trend-summary">
                     <div class="trend-label">FOA2+FOA1</div>
                     <div class="trend-value" style="color: #42a5f5;">79人</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- A320 副驾驶报务人数统计 -->
+    <div class="section-header animate-in">
+        <div class="section-badge" style="background: linear-gradient(135deg, #2e7d32, #66bb6a);">副驾驶报务</div>
+        <div class="section-title">A320 副驾驶报务人数统计</div>
+        <div class="section-line"></div>
+    </div>
+    
+    <div class="compare-grid">
+        <div class="card animate-in delay-1" style="grid-column: 1 / -1;">
+            <div class="card-title"><div class="icon">📻</div>各报务条数人数及占比（2026年6月）</div>
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>报务条数</th>
+                            <th>人数</th>
+                            <th>占总人数比例</th>
+                            <th>可视化</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag" style="background: linear-gradient(135deg, #66bb6a, #81c784); color: white;">4条报务</span></td>
+                            <td><strong>9</strong> 人</td>
+                            <td><strong style="color: #81c784;">4.6%</strong></td>
+                            <td>
+                                <div class="rate">
+                                    <span style="margin-right: 8px;">4.6%</span>
+                                    <div class="rate-bar"><div class="rate-bar-fill" style="width: 4.6%"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag" style="background: linear-gradient(135deg, #42a5f5, #64b5f6); color: white;">3条报务</span></td>
+                            <td><strong>59</strong> 人</td>
+                            <td><strong style="color: #42a5f5;">30.1%</strong></td>
+                            <td>
+                                <div class="rate">
+                                    <span style="margin-right: 8px;">30.1%</span>
+                                    <div class="rate-bar"><div class="rate-bar-fill" style="width: 30.1%"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag" style="background: linear-gradient(135deg, #ffa726, #ffb74d); color: white;">2条报务</span></td>
+                            <td><strong>42</strong> 人</td>
+                            <td><strong style="color: #ffa726;">21.4%</strong></td>
+                            <td>
+                                <div class="rate">
+                                    <span style="margin-right: 8px;">21.4%</span>
+                                    <div class="rate-bar"><div class="rate-bar-fill" style="width: 21.4%"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag" style="background: linear-gradient(135deg, #ef5350, #e57373); color: white;">1条报务</span></td>
+                            <td><strong>28</strong> 人</td>
+                            <td><strong style="color: #ef5350;">14.3%</strong></td>
+                            <td>
+                                <div class="rate">
+                                    <span style="margin-right: 8px;">14.3%</span>
+                                    <div class="rate-bar"><div class="rate-bar-fill" style="width: 14.3%"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag" style="background: linear-gradient(135deg, #78909c, #90a4ae); color: white;">0条报务</span></td>
+                            <td><strong>58</strong> 人</td>
+                            <td><strong style="color: #90a4ae;">29.6%</strong></td>
+                            <td>
+                                <div class="rate">
+                                    <span style="margin-right: 8px;">29.6%</span>
+                                    <div class="rate-bar"><div class="rate-bar-fill" style="width: 29.6%"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 20px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
+                <div class="trend-summary">
+                    <div class="trend-label">4条报务</div>
+                    <div class="trend-value" style="color: #81c784;">9人</div>
+                </div>
+                <div class="trend-summary">
+                    <div class="trend-label">3条报务</div>
+                    <div class="trend-value" style="color: #42a5f5;">59人</div>
+                </div>
+                <div class="trend-summary">
+                    <div class="trend-label">2条报务</div>
+                    <div class="trend-value" style="color: #ffa726;">42人</div>
+                </div>
+                <div class="trend-summary">
+                    <div class="trend-label">1条报务</div>
+                    <div class="trend-value" style="color: #ef5350;">28人</div>
+                </div>
+                <div class="trend-summary">
+                    <div class="trend-label">0条报务</div>
+                    <div class="trend-value" style="color: #90a4ae;">58人</div>
                 </div>
             </div>
         </div>
